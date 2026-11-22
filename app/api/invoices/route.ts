@@ -6,8 +6,12 @@ import { createInvoice } from "@/lib/services/invoices";
 export const dynamic = "force-dynamic";
 
 export async function POST(req: Request) {
-  return withApi(async () => {
-    const body = await readJsonBody(req);
-    return createInvoice(getDb(), getDemoWorkspaceId(), body);
-  }, 201);
+  return withApi(
+    async () => {
+      const body = await readJsonBody(req);
+      return createInvoice(getDb(), getDemoWorkspaceId(), body);
+    },
+    201,
+    { revalidateMoney: true },
+  );
 }

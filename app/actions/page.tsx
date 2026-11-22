@@ -38,8 +38,9 @@ export default async function ActionsPage({
         title="Impact-ranked follow-ups"
         description={
           <>
-            Ranked queue for {boot.workspace.name} as of <Num className="text-cc-ink">{boot.as_of}</Num>.
-            Generate reviewable WhatsApp drafts in English or Telugu — nothing is sent automatically.
+            Who to chase first for {boot.workspace.name} as of{" "}
+            <Num className="text-cc-ink">{boot.as_of}</Num>. Ranked by buffer impact if payment slips —
+            then draft a WhatsApp reminder (nothing is sent automatically).
           </>
         }
       >

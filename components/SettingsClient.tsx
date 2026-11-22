@@ -47,10 +47,47 @@ export function SettingsClient({
   const [whatsapp, setWhatsapp] = useState("");
   const [notes, setNotes] = useState("");
 
+  const [resetConfirm, setResetConfirm] = useState("");
+  const [resetOpen, setResetOpen] = useState(false);
+
   function refresh(msg: string) {
     setOkMsg(msg);
     setError(null);
     router.refresh();
+  }
+
+  function resetDemo() {
+    if (resetConfirm.trim() !== "RESET") {
+      setError('Type RESET to confirm wiping and reseeding the demo workspace');
+      return;
+    }
+    setError(null);
+    startTransition(async () => {
+      try {
+        const data = await apiJson<{
+          opening_cash_paise: number;
+          opening_cash_as_of: string;
+          minimum_cash_buffer_paise: number;
+          primary_demo_invoice: string;
+        }>("/api/settings/reset-demo", {
+          method: "POST",
+          body: JSON.stringify({ confirm: "RESET" }),
+        });
+        setOpeningCash(String(data.opening_cash_paise / 100));
+        setAsOf(data.opening_cash_as_of);
+        setBuffer(String(data.minimum_cash_buffer_paise / 100));
+        setResetConfirm("");
+        setResetOpen(false);
+        setOkMsg(
+          `Demo reset. Opening cash restored; primary what-if is ${data.primary_demo_invoice} (Aster Dental).`,
+        );
+        setError(null);
+        router.refresh();
+        router.push("/");
+      } catch (err) {
+        setError(err instanceof ApiRequestError ? err.message : "Could not reset demo");
+      }
+    });
   }
 
   function saveCash() {
@@ -209,6 +246,56 @@ export function SettingsClient({
         <Button disabled={pending} onClick={createCustomer}>
           Create customer
         </Button>
+      </Card>
+
+      <Card className="space-y-3 border-cc-danger/30 p-4 sm:p-5">
+        <h2 className="font-display text-xl text-cc-ink">Reset demo data</h2>
+        <p className="text-sm text-cc-muted">
+          Wipes PixelCraft Studio and reseeds the hackathon demo: opening cash ₹80,000, Aster Dental
+          (INV-001) unpaid for what-if, bills and recurring expenses restored. Use this before a live
+          presentation if you have been clicking around.
+        </p>
+        {!resetOpen ? (
+          <Button variant="danger" disabled={pending} onClick={() => setResetOpen(true)}>
+            Reset demo…
+          </Button>
+        ) : (
+          <div className="space-y-3 rounded-md border border-cc-border bg-cc-bg/60 p-3">
+            <p className="text-sm text-cc-ink">
+              This cannot be undone. Type <span className="font-medium">RESET</span> to confirm.
+            </p>
+            <label className="block text-sm">
+              <span className={labelMuted}>Confirmation</span>
+              <input
+                className={fieldClass}
+                value={resetConfirm}
+                onChange={(e) => setResetConfirm(e.target.value)}
+                placeholder="RESET"
+                autoComplete="off"
+                spellCheck={false}
+              />
+            </label>
+            <div className="flex flex-wrap gap-2">
+              <Button
+                variant="danger"
+                disabled={pending || resetConfirm.trim() !== "RESET"}
+                onClick={resetDemo}
+              >
+                Wipe and reseed
+              </Button>
+              <Button
+                variant="secondary"
+                disabled={pending}
+                onClick={() => {
+                  setResetOpen(false);
+                  setResetConfirm("");
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        )}
       </Card>
     </div>
   );

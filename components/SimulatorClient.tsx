@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState, useTransition } from "react";
 import { apiJson, ApiRequestError } from "@/lib/api/browser";
 import { Alert } from "@/components/ui/Alert";
@@ -7,9 +8,9 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { fieldClass, labelMuted } from "@/components/ui/field";
-import { Metric } from "@/components/ui/Metric";
 import { Money, Num } from "@/components/ui/Money";
 import { ScenarioCurveChart } from "@/components/ui/ScenarioCurveChart";
+import { formatDisplayDate } from "@/lib/format-date";
 
 export type SimulatorInvoice = {
   id: string;
@@ -137,7 +138,7 @@ export function SimulatorClient({ invoices }: { invoices: SimulatorInvoice[] }) 
                         <span className="font-normal text-cc-muted"> · {inv.customer_name}</span>
                       </span>
                       <span className="mt-1 block text-sm text-cc-muted">
-                        Expected <Num>{expected}</Num>
+                        Expected <Num>{formatDisplayDate(expected)}</Num>
                         {inv.status === "overdue" ? (
                           <>
                             {" "}
@@ -213,91 +214,162 @@ export function SimulatorClient({ invoices }: { invoices: SimulatorInvoice[] }) 
       {error ? <Alert>{error}</Alert> : null}
 
       {result ? (
-        <Card className="space-y-6 p-4 sm:p-5">
-          <div className="flex flex-wrap items-center gap-2">
-            <h2 className="font-display text-xl text-cc-ink">Baseline vs delayed</h2>
-            {shortfallWorse ? (
-              <Badge variant="danger">
-                +<Num>{shiftDays}</Num>d shortfall{" "}
-                <Money paise={result.comparison.shortfallDeltaPaise} />
-              </Badge>
-            ) : (
-              <Badge variant="ok">No extra shortfall</Badge>
-            )}
+        <div className="cc-rise space-y-6">
+          <div
+            className={`relative overflow-hidden rounded-xl border p-5 sm:p-7 ${
+              shortfallWorse
+                ? "border-cc-danger/25 bg-gradient-to-br from-cc-danger-bg/90 via-cc-card to-cc-card"
+                : "border-cc-ok-fg/20 bg-gradient-to-br from-cc-ok-bg/80 via-cc-card to-cc-card"
+            }`}
+          >
+            <div
+              className={`pointer-events-none absolute inset-0 ${
+                shortfallWorse
+                  ? "bg-[radial-gradient(600px_280px_at_0%_0%,rgba(225,29,72,0.12),transparent_60%)]"
+                  : "bg-[radial-gradient(600px_280px_at_0%_0%,rgba(21,128,61,0.12),transparent_60%)]"
+              }`}
+              aria-hidden
+            />
+            <div className="relative grid gap-6 lg:grid-cols-[1.4fr_auto] lg:items-end">
+              <div className="space-y-4">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span
+                    className={`inline-flex items-center gap-2 rounded-md px-2.5 py-1 text-xs font-semibold uppercase tracking-[0.12em] ${
+                      shortfallWorse
+                        ? "bg-cc-danger-bg text-cc-danger-fg"
+                        : "bg-cc-ok-bg text-cc-ok-fg"
+                    }`}
+                  >
+                    <span className="h-1.5 w-1.5 rounded-full bg-current" aria-hidden />
+                    {shortfallWorse ? "Extra shortfall" : "Still safe"}
+                  </span>
+                  <Badge variant={shortfallWorse ? "danger" : "ok"}>
+                    +<Num>{shiftDays}</Num> day delay
+                  </Badge>
+                </div>
+
+                <div>
+                  <p className="text-xs font-medium uppercase tracking-[0.14em] text-cc-muted">
+                    {shortfallWorse ? "Added buffer shortfall" : "Buffer shortfall change"}
+                  </p>
+                  <p
+                    className={`mt-1 font-numeric text-4xl tabular-nums tracking-tight sm:text-5xl ${
+                      shortfallWorse ? "text-cc-danger-fg" : "text-cc-ok-fg"
+                    }`}
+                  >
+                    {shortfallWorse ? "+" : ""}
+                    <Money paise={result.comparison.shortfallDeltaPaise} />
+                  </p>
+                  <p className="mt-2 max-w-xl text-sm text-cc-muted">
+                    {result.shifted.length > 0 ? (
+                      <>
+                        If {result.shifted.map((s) => s.invoiceNumber).join(", ")} slip{" "}
+                        <Num>{shiftDays}</Num> days, lowest cash falls from{" "}
+                        <Money paise={result.comparison.baselineMinPaise} className="text-cc-ink" /> to{" "}
+                        <Money paise={result.comparison.scenarioMinPaise} className="text-cc-ink" />.
+                      </>
+                    ) : (
+                      <>
+                        No receipt dates shifted (overdue invoices keep current timing). Lowest cash:{" "}
+                        <Money paise={result.comparison.baselineMinPaise} className="text-cc-ink" /> →{" "}
+                        <Money paise={result.comparison.scenarioMinPaise} className="text-cc-ink" />.
+                      </>
+                    )}
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap gap-x-6 gap-y-2 border-t border-cc-border/70 pt-4 text-sm text-cc-muted">
+                  <p>
+                    Baseline min{" "}
+                    <span className="font-numeric font-medium text-cc-ink">
+                      <Money paise={result.comparison.baselineMinPaise} />
+                    </span>
+                  </p>
+                  <p>
+                    Delayed min{" "}
+                    <span
+                      className={`font-numeric font-medium ${
+                        result.comparison.changeInMinPaise < 0 ? "text-cc-danger-fg" : "text-cc-ink"
+                      }`}
+                    >
+                      <Money paise={result.comparison.scenarioMinPaise} />
+                    </span>
+                  </p>
+                  <p>
+                    First breach{" "}
+                    <span className="font-numeric font-medium text-cc-ink">
+                      {result.comparison.scenarioFirstBreach
+                        ? formatDisplayDate(result.comparison.scenarioFirstBreach)
+                        : "none"}
+                    </span>
+                    <span className="text-cc-muted">
+                      {" "}
+                      (was{" "}
+                      {result.comparison.baselineFirstBreach
+                        ? formatDisplayDate(result.comparison.baselineFirstBreach)
+                        : "none"}
+                      )
+                    </span>
+                  </p>
+                </div>
+
+                {result.shifted.length > 0 ? (
+                  <ul className="space-y-1 text-sm text-cc-muted">
+                    {result.shifted.map((s) => (
+                      <li key={s.invoiceId}>
+                        {s.invoiceNumber}: <Num>{formatDisplayDate(s.from)}</Num> →{" "}
+                        <Num>{formatDisplayDate(s.to)}</Num>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+              </div>
+
+              <div className="flex flex-col gap-2 sm:flex-row lg:flex-col">
+                <Link
+                  href="/actions"
+                  className="inline-flex items-center justify-center rounded-md bg-cc-primary px-4 py-2.5 text-sm font-medium text-white transition hover:bg-cc-primary-hover"
+                >
+                  Today&apos;s actions
+                </Link>
+                <Link
+                  href="/forecast"
+                  className="inline-flex items-center justify-center rounded-md border border-cc-border bg-cc-card/80 px-4 py-2.5 text-sm font-medium text-cc-ink transition hover:bg-cc-bg"
+                >
+                  Open forecast
+                </Link>
+              </div>
+            </div>
           </div>
 
-          {result.shifted.length > 0 ? (
-            <ul className="space-y-1 text-sm text-cc-muted">
-              {result.shifted.map((s) => (
-                <li key={s.invoiceId}>
-                  {s.invoiceNumber}: <Num>{s.from}</Num> → <Num>{s.to}</Num>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-sm text-cc-muted">
-              No receipt dates were shifted (overdue invoices keep their current expected timing).
+          <div className="space-y-3">
+            <div>
+              <h2 className="font-display text-xl text-cc-ink sm:text-2xl">Baseline vs delayed</h2>
+              <p className="mt-1 text-sm text-cc-muted">
+                Indigo is baseline cash; rose is the delayed path. Amber is your buffer.
+              </p>
+            </div>
+            <ScenarioCurveChart
+              baselineSeries={result.baseline.series}
+              scenarioSeries={result.scenario.series}
+              bufferPaise={result.baseline.bufferPaise}
+              baselineFirstBreach={result.comparison.baselineFirstBreach}
+              scenarioFirstBreach={result.comparison.scenarioFirstBreach}
+              shiftDays={shiftDays}
+            />
+            <p className="text-xs text-cc-muted">
+              Worst day {result.comparison.scenarioWorstDate
+                ? formatDisplayDate(result.comparison.scenarioWorstDate)
+                : "—"}
+              {" · "}
+              Max gap <Money paise={result.comparison.baselineMaxGapPaise} /> →{" "}
+              <Money paise={result.comparison.scenarioMaxGapPaise} />
             </p>
-          )}
-
-          <ScenarioCurveChart
-            baselineSeries={result.baseline.series}
-            scenarioSeries={result.scenario.series}
-            bufferPaise={result.baseline.bufferPaise}
-            baselineFirstBreach={result.comparison.baselineFirstBreach}
-            scenarioFirstBreach={result.comparison.scenarioFirstBreach}
-            shiftDays={shiftDays}
-          />
-
-          <div className="grid gap-6 sm:grid-cols-2">
-            <Metric
-              label="Min balance"
-              value={<Money paise={result.comparison.scenarioMinPaise} />}
-              hint={
-                <>
-                  Baseline <Money paise={result.comparison.baselineMinPaise} /> · Change{" "}
-                  <Money paise={result.comparison.changeInMinPaise} />
-                </>
-              }
-              tone={result.comparison.changeInMinPaise < 0 ? "danger" : "default"}
-            />
-            <Metric
-              label="Buffer shortfall delta"
-              value={<Money paise={result.comparison.shortfallDeltaPaise} />}
-              hint={
-                <>
-                  Max gap <Money paise={result.comparison.baselineMaxGapPaise} /> →{" "}
-                  <Money paise={result.comparison.scenarioMaxGapPaise} />
-                </>
-              }
-              tone={shortfallWorse ? "danger" : "ok"}
-            />
-            <Metric
-              label="First buffer breach"
-              value={
-                <Num>{result.comparison.scenarioFirstBreach ?? "none"}</Num>
-              }
-              hint={
-                <>
-                  Baseline <Num>{result.comparison.baselineFirstBreach ?? "none"}</Num>
-                </>
-              }
-              tone={result.comparison.scenarioFirstBreach ? "danger" : "ok"}
-            />
-            <Metric
-              label="Worst date"
-              value={<Num>{result.comparison.scenarioWorstDate ?? "—"}</Num>}
-              hint={
-                <>
-                  Baseline <Num>{result.comparison.baselineWorstDate ?? "—"}</Num>
-                </>
-              }
-            />
           </div>
 
           {result.comparison.newlyThreatenedBills.length > 0 ? (
-            <div className="space-y-2">
-              <h3 className="font-medium text-cc-ink">Newly threatened bills</h3>
+            <Card className="space-y-2 p-4 sm:p-5">
+              <h3 className="font-display text-lg text-cc-ink">Newly threatened bills</h3>
               <ul className="space-y-1 text-sm text-cc-muted">
                 {result.comparison.newlyThreatenedBills.map((title) => (
                   <li key={title}>
@@ -305,12 +377,12 @@ export function SimulatorClient({ invoices }: { invoices: SimulatorInvoice[] }) 
                   </li>
                 ))}
               </ul>
-            </div>
+            </Card>
           ) : null}
 
           {result.comparison.worsenedBills.length > 0 ? (
-            <div className="space-y-2">
-              <h3 className="font-medium text-cc-ink">Worsened bill gaps</h3>
+            <Card className="space-y-2 p-4 sm:p-5">
+              <h3 className="font-display text-lg text-cc-ink">Worsened bill gaps</h3>
               <ul className="space-y-1 text-sm text-cc-muted">
                 {result.comparison.worsenedBills.map((b) => (
                   <li key={b.outflowId}>
@@ -319,9 +391,9 @@ export function SimulatorClient({ invoices }: { invoices: SimulatorInvoice[] }) 
                   </li>
                 ))}
               </ul>
-            </div>
+            </Card>
           ) : null}
-        </Card>
+        </div>
       ) : null}
     </div>
   );

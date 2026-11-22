@@ -10,8 +10,12 @@ export async function GET() {
 }
 
 export async function PATCH(req: Request) {
-  return withApi(async () => {
-    const body = await readJsonBody(req);
-    return updateCashSettings(getDb(), getDemoWorkspaceId(), body);
-  });
+  return withApi(
+    async () => {
+      const body = await readJsonBody(req);
+      return updateCashSettings(getDb(), getDemoWorkspaceId(), body);
+    },
+    200,
+    { revalidateMoney: true },
+  );
 }

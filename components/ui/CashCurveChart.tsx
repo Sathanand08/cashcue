@@ -27,6 +27,8 @@ type Props = {
   bufferPaise: number;
   firstBreachDate?: string | null;
   className?: string;
+  /** Soft draw-in for hero overview; off by default for denser screens. */
+  animated?: boolean;
 };
 
 function shortINR(paise: number): string {
@@ -47,7 +49,13 @@ function tickDate(iso: string): string {
 }
 
 /** Presentational cash forecast chart (Recharts) — uses precomputed series only. */
-export function CashCurveChart({ series, bufferPaise, firstBreachDate, className = "" }: Props) {
+export function CashCurveChart({
+  series,
+  bufferPaise,
+  firstBreachDate,
+  className = "",
+  animated = false,
+}: Props) {
   const fillId = `cashFill-${useId().replace(/:/g, "")}`;
 
   if (series.length === 0) {
@@ -137,7 +145,8 @@ export function CashCurveChart({ series, bufferPaise, firstBreachDate, className
               dataKey="balance"
               stroke="none"
               fill={`url(#${fillId})`}
-              isAnimationActive={false}
+              isAnimationActive={animated}
+              animationDuration={900}
             />
             <Line
               type="monotone"
@@ -147,7 +156,8 @@ export function CashCurveChart({ series, bufferPaise, firstBreachDate, className
               strokeWidth={2.5}
               dot={false}
               activeDot={{ r: 4, fill: CHART.primary, stroke: "#fff", strokeWidth: 2 }}
-              isAnimationActive={false}
+              isAnimationActive={animated}
+              animationDuration={900}
             />
             {breach ? (
               <ReferenceDot

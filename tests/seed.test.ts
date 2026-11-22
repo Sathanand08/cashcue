@@ -68,3 +68,65 @@ test("seed is idempotent: second call returns the same workspace id and invoice 
   assert.equal(ws2, ws1);
   assert.equal(countInvoices(ws2), count1);
 });
+
+test("resetDemoWorkspace wipes mutations and restores Aster seed baseline", () => {
+  const ws = seed.seedDemoWorkspace(db);
+
+  db.prepare(
+    `UPDATE workspace_settings SET opening_cash_paise = ? WHERE workspace_id = ?`,
+  ).run(11_400_000, ws);
+
+  const inv1 = db
+    .prepare("SELECT id FROM invoices WHERE workspace_id = ? AND invoice_number = 'INV-001'")
+    .get(ws) as { id: string };
+  db.prepare(
+    `INSERT INTO cash_transactions
+      (id, workspace_id, direction, amount_paise, occurred_on, source_type, source_id, note, created_at)
+     VALUES (?, ?, 'inflow', ?, '2026-11-21', 'test', NULL, 'dirty', ?)`,
+  ).run(crypto.randomUUID(), ws, 340_000, "2026-11-21T00:00:00+05:30");
+  db.prepare(
+    `INSERT INTO payments
+      (id, workspace_id, invoice_id, amount_paise, received_on, payment_method, reference, idempotency_key, created_at)
+     VALUES (?, ?, ?, ?, '2026-11-21', 'UPI', 'DIRTY', NULL, ?)`,
+  ).run(crypto.randomUUID(), ws, inv1.id, 100_000, "2026-11-21T00:00:00+05:30");
+
+  const result = seed.resetDemoWorkspace(db);
+
+  assert.equal(result.workspace_name, "PixelCraft Studio");
+  assert.equal(result.opening_cash_paise, 8_000_000);
+  assert.equal(result.opening_cash_as_of, "2026-11-21");
+  assert.equal(result.minimum_cash_buffer_paise, 5_000_000);
+  assert.equal(result.invoice_count, 7);
+  assert.equal(result.primary_demo_invoice, "INV-001");
+
+  const cashTx = db.prepare("SELECT COUNT(*) AS n FROM cash_transactions").get() as { n: number };
+  assert.equal(cashTx.n, 0);
+
+  const aster = db
+    .prepare(
+      `SELECT i.invoice_number, c.name, i.amount_paise,
+              (SELECT COALESCE(SUM(p.amount_paise), 0) FROM payments p WHERE p.invoice_id = i.id) AS paid
+       FROM invoices i
+       JOIN customers c ON c.id = i.customer_id
+       WHERE i.workspace_id = ? AND i.invoice_number = 'INV-001'`,
+    )
+    .get(result.workspace_id) as {
+    invoice_number: string;
+    name: string;
+    amount_paise: number;
+    paid: number;
+  };
+  assert.equal(aster.name, "Aster Dental Clinic");
+  assert.equal(aster.amount_paise, 4_500_000);
+  assert.equal(aster.paid, 0);
+
+  const inv005Paid = db
+    .prepare(
+      `SELECT COALESCE(SUM(p.amount_paise), 0) AS paid
+       FROM payments p
+       JOIN invoices i ON i.id = p.invoice_id
+       WHERE i.workspace_id = ? AND i.invoice_number = 'INV-005'`,
+    )
+    .get(result.workspace_id) as { paid: number };
+  assert.equal(inv005Paid.paid, 2_000_000);
+});

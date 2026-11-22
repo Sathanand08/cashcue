@@ -29,12 +29,12 @@ export default function SimulatorPage() {
     <section className="space-y-8">
       <PageHeader
         eyebrow="What-If Simulator"
-        title="Delay payment scenarios"
+        title="What if payment slips?"
         description={
           <>
-            Compare baseline cash risk for {boot.workspace.name} against delayed receipts. Simulations
-            never write to the database — use them to feel the cost of a{" "}
-            <Num className="text-cc-ink">+15</Num>-day slip.
+            Delay a customer receipt for {boot.workspace.name} and see the buffer shortfall instantly.
+            Start with Aster Dental (+<Num className="text-cc-ink">15</Num> days). Simulations never
+            change your records.
           </>
         }
       />

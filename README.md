@@ -20,7 +20,7 @@ npm test
 
 The test script already passes the `--experimental-sqlite` flag.
 
-The seed does not update existing data: if `data/cashcue.db` exists from an older seed, delete it so the corrected seed applies.
+The seed does not update existing data on its own. Prefer **Settings → Reset demo data** (type `RESET`) to wipe and reseed PixelCraft Studio, or delete `data/cashcue.db` and restart.
 
 ## Limitations
 

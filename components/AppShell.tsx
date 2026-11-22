@@ -1,13 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { APP_NAV } from "@/lib/nav";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
+
+  // Soft navigation can keep a stale RSC payload (e.g. Overview Cash now vs Forecast).
+  // Refresh the active route whenever the path changes so money screens stay aligned.
+  useEffect(() => {
+    router.refresh();
+  }, [pathname, router]);
 
   return (
     <div className="min-h-screen lg:grid lg:grid-cols-[15rem_1fr]">

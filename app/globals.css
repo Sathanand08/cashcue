@@ -30,3 +30,39 @@ body {
     radial-gradient(800px 420px at 92% 0%, rgba(217, 119, 6, 0.05), transparent 50%),
     linear-gradient(180deg, #f6f7fb 0%, #eef0f7 100%);
 }
+
+@keyframes cc-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cc-rise {
+  animation: cc-rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.cc-rise-delay-1 {
+  animation-delay: 0.07s;
+}
+
+.cc-rise-delay-2 {
+  animation-delay: 0.14s;
+}
+
+.cc-rise-delay-3 {
+  animation-delay: 0.21s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cc-rise,
+  .cc-rise-delay-1,
+  .cc-rise-delay-2,
+  .cc-rise-delay-3 {
+    animation: none;
+  }
+}

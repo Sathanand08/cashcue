@@ -10,8 +10,12 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-  return withApi(async () => {
-    const body = await readJsonBody(req);
-    return createBill(getDb(), getDemoWorkspaceId(), body);
-  }, 201);
+  return withApi(
+    async () => {
+      const body = await readJsonBody(req);
+      return createBill(getDb(), getDemoWorkspaceId(), body);
+    },
+    201,
+    { revalidateMoney: true },
+  );
 }

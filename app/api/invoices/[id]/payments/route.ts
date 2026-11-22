@@ -19,5 +19,5 @@ export async function POST(req: Request, ctx: { params: Promise<{ id: string }> 
         : raw;
 
     return recordPayment(getDb(), getDemoWorkspaceId(), id, body);
-  }, 201);
+  }, 201, { revalidateMoney: true });
 }

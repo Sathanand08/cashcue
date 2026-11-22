@@ -18,9 +18,13 @@ export async function GET(_req: Request, ctx: RouteContext) {
 }
 
 export async function PATCH(req: Request, ctx: RouteContext) {
-  return withApi(async () => {
-    const { id } = await ctx.params;
-    const body = await readJsonBody(req);
-    return updateRecurringExpense(getDb(), getDemoWorkspaceId(), id, body);
-  });
+  return withApi(
+    async () => {
+      const { id } = await ctx.params;
+      const body = await readJsonBody(req);
+      return updateRecurringExpense(getDb(), getDemoWorkspaceId(), id, body);
+    },
+    200,
+    { revalidateMoney: true },
+  );
 }

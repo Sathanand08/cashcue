@@ -9,5 +9,5 @@ export async function POST(_req: Request, ctx: { params: Promise<{ id: string }>
   return withApi(async () => {
     const { id } = await ctx.params;
     return sendInvoice(getDb(), getDemoWorkspaceId(), id);
-  });
+  }, 200, { revalidateMoney: true });
 }

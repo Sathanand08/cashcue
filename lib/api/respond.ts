@@ -1,12 +1,25 @@
+import { revalidateMoneyViews } from "@/lib/api/revalidate";
 import { AppError, validationError } from "@/lib/services/errors";
+
+type WithApiOptions = {
+  /** When true, bust cached Overview/Forecast/etc. after a successful mutation. */
+  revalidateMoney?: boolean;
+};
 
 /**
  * Runs a handler and maps the result to { data } or { error } JSON.
  * AppError keeps its code and status; anything else becomes a generic 500.
  */
-export async function withApi(handler: () => unknown, status = 200): Promise<Response> {
+export async function withApi(
+  handler: () => unknown,
+  status = 200,
+  options: WithApiOptions = {},
+): Promise<Response> {
   try {
     const data = await handler();
+    if (options.revalidateMoney) {
+      revalidateMoneyViews();
+    }
     return Response.json({ data }, { status });
   } catch (error) {
     if (error instanceof AppError) {
