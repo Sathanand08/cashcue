@@ -1,0 +1,22 @@
+﻿== v2-test.log: ^# (tests|pass|fail) and ^not ok ==
+# tests 25
+# pass 25
+# fail 0
+== v2-build.log: Compiled|Failed|Error|Type error|Route (app)|swc (case-insensitive) ==
+node.exe :  ΓÜá Attempted to load @next/swc-win32-x64-msvc, but an error occurred: 
+\\?\D:\hackathon\cashcue\node_modules\@next\swc-win32-x64-msvc\next-swc.win32-x64-msvc.node is not a valid Win32 
+    + FullyQualifiedErrorId : NativeCommandError
+\\?\D:\hackathon\cashcue\node_modules\@next\swc-win32-x64-msvc\next-swc.win32-x64-msvc.node
+ ΓÜá Found lockfile missing swc dependencies, patching...
+ ΓÜá Attempted to load @next/swc-win32-x64-msvc, but an error occurred: 
+\\?\D:\hackathon\cashcue\node_modules\@next\swc-win32-x64-msvc\next-swc.win32-x64-msvc.node is not a valid Win32 
+\\?\D:\hackathon\cashcue\node_modules\@next\swc-win32-x64-msvc\next-swc.win32-x64-msvc.node
+ ΓÜá Found lockfile missing swc dependencies, patching...
+ ΓÜá Attempted to load @next/swc-win32-x64-msvc, but an error occurred: 
+\\?\D:\hackathon\cashcue\node_modules\@next\swc-win32-x64-msvc\next-swc.win32-x64-msvc.node is not a valid Win32 
+\\?\D:\hackathon\cashcue\node_modules\@next\swc-win32-x64-msvc\next-swc.win32-x64-msvc.node
+ ΓÜá Found lockfile missing swc dependencies, patching...
+ Γ£ô Compiled successfully
+== v2-typecheck.log: first 20 lines ==
+EXIT_CODE=0
+EXIT_CODE=

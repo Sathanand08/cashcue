@@ -1,0 +1,27 @@
+﻿== node_modules ==
+Test-Path node_modules: True
+entry count: 106
+== key files (exists / size) ==
+node_modules\next\package.json : exists=True size=10465
+node_modules\typescript\package.json : exists=True size=3609
+node_modules\react\package.json : exists=True size=1248
+node_modules\.bin\tsc.cmd : exists=True size=323
+node_modules\.bin\next.cmd : exists=True size=323
+node_modules\@next\swc-win32-x64-msvc\next-swc.win32-x64-msvc.node : exists=True size=17221936
+node_modules\tsx\package.json : exists=True size=1624
+node_modules\esbuild\package.json : exists=True size=1380
+node_modules\.package-lock.json : exists=True size=54192
+== project files ==
+package.json : exists=True
+package-lock.json : exists=True
+tsconfig.json : exists=True
+next.config.mjs : exists=True
+scripts\next.mjs : exists=True
+lib\db\schema.sql : exists=True
+lib\db\client.ts : exists=True
+== lockfile comparison ==
+backup lock exists: True
+backup SHA256: 20D068E8DF444A42913C17302A5F2C8E298AB85DD0B18A6899B44C7EBC707A73
+project SHA256: 20D068E8DF444A42913C17302A5F2C8E298AB85DD0B18A6899B44C7EBC707A73
+identical: True
+EXIT_CODE=

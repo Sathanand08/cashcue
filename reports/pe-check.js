@@ -1,0 +1,15 @@
+﻿const fs = require('fs');
+const crypto = require('crypto');
+const f = 'node_modules/@next/swc-win32-x64-msvc/next-swc.win32-x64-msvc.node';
+const buf = fs.readFileSync(f);
+console.log('FILE: ' + f);
+console.log('FILE_SIZE_BYTES: ' + buf.length);
+console.log('MZ_SIGNATURE_BYTES_0_1: ' + JSON.stringify(buf.toString('latin1', 0, 2)) + ' MZ_OK=' + (buf[0] === 0x4d && buf[1] === 0x5a));
+const e_lfanew = buf.readUInt32LE(0x3c);
+console.log('E_LFANEW_HEX: 0x' + e_lfanew.toString(16) + ' (dec ' + e_lfanew + ')');
+const peSig = buf.toString('latin1', e_lfanew, e_lfanew + 4);
+console.log('PE_SIGNATURE_OK: ' + (peSig === 'PE\u0000\u0000') + ' raw=' + JSON.stringify(peSig));
+const machine = buf.readUInt16LE(e_lfanew + 4);
+console.log('MACHINE_HEX: 0x' + machine.toString(16));
+console.log('NUMBER_OF_SECTIONS: ' + buf.readUInt16LE(e_lfanew + 6));
+console.log('SHA256: ' + crypto.createHash('sha256').update(buf).digest('hex'));

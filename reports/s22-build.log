@@ -1,0 +1,69 @@
+
+> cashcue@0.1.0 build
+> node scripts/next.mjs build
+
+   ▲ Next.js 15.1.6
+
+   Creating an optimized production build ...
+ ⚠ Attempted to load @next/swc-win32-x64-msvc, but an error occurred: \\?\D:\hackathon\cashcue\node_modules\@next\swc-win32-x64-msvc\next-swc.win32-x64-msvc.node is not a valid Win32 application.
+\\?\D:\hackathon\cashcue\node_modules\@next\swc-win32-x64-msvc\next-swc.win32-x64-msvc.node
+ ⚠ Attempted to load @next/swc-win32-x64-msvc, but an error occurred: \\?\D:\hackathon\cashcue\node_modules\@next\swc-win32-x64-msvc\next-swc.win32-x64-msvc.node is not a valid Win32 application.
+\\?\D:\hackathon\cashcue\node_modules\@next\swc-win32-x64-msvc\next-swc.win32-x64-msvc.node
+ ⚠ Attempted to load @next/swc-win32-x64-msvc, but an error occurred: \\?\D:\hackathon\cashcue\node_modules\@next\swc-win32-x64-msvc\next-swc.win32-x64-msvc.node is not a valid Win32 application.
+\\?\D:\hackathon\cashcue\node_modules\@next\swc-win32-x64-msvc\next-swc.win32-x64-msvc.node
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+   Collecting page data ...
+ ⚠ Attempted to load @next/swc-win32-x64-msvc, but an error occurred: \\?\D:\hackathon\cashcue\node_modules\@next\swc-win32-x64-msvc\next-swc.win32-x64-msvc.node is not a valid Win32 application.
+\\?\D:\hackathon\cashcue\node_modules\@next\swc-win32-x64-msvc\next-swc.win32-x64-msvc.node
+(node:53168) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:26372) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:29676) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:48140) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:65352) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:27672) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:29276) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:60932) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:33440) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:56268) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+   Generating static pages (0/4) ...
+   Generating static pages (1/4) 
+   Generating static pages (2/4) 
+   Generating static pages (3/4) 
+ ✓ Generating static pages (4/4)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                              Size     First Load JS
+┌ ○ /                                    161 B           106 kB
+├ ○ /_not-found                          979 B           106 kB
+├ ƒ /api/bootstrap                       161 B           106 kB
+├ ƒ /api/customers                       161 B           106 kB
+├ ƒ /api/forecast                        161 B           106 kB
+├ ƒ /api/forecast/scenarios/delay        161 B           106 kB
+├ ƒ /api/invoices                        161 B           106 kB
+├ ƒ /api/invoices/[id]                   161 B           106 kB
+├ ƒ /api/invoices/[id]/payments          161 B           106 kB
+├ ƒ /api/invoices/[id]/send              161 B           106 kB
+├ ƒ /api/receivables                     161 B           106 kB
+└ ƒ /api/settings/cash                   161 B           106 kB
++ First Load JS shared by all            105 kB
+  ├ chunks/4bd1b696-20882bf820444624.js  52.9 kB
+  ├ chunks/517-12b10450b7ce0f0b.js       50.5 kB
+  └ other shared chunks (total)          1.95 kB
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+BUILD_EXIT=0  

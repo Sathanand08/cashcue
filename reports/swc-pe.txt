@@ -1,0 +1,33 @@
+﻿== 1. PE validation (reports\pe-check.cjs) ==
+NOTE: reports\pe-check.js failed first: package.json has "type":"module", so require() was undefined (ReferenceError). Re-run as .cjs.
+FILE: node_modules/@next/swc-win32-x64-msvc/next-swc.win32-x64-msvc.node
+FILE_SIZE_BYTES: 17221936
+MZ_SIGNATURE_BYTES_0_1: "MZ" MZ_OK=true
+E_LFANEW_HEX: 0x78 (dec 120)
+PE_SIGNATURE_OK: true raw="PE\u0000\u0000"
+MACHINE_HEX: 0x8664
+NUMBER_OF_SECTIONS: 8
+SHA256: a9242a9e2151aaae629cc0cbc41007bb30c4a588fe03d0f0a42469f61a5acec9
+PE_CHECK_EXIT=0
+
+== 2. dlopen (reports\dlopen-check.cjs, literal path) ==
+DLOPEN_ERR ERR_DLOPEN_FAILED D:\hackathon\cashcue\node_modules\@next\swc-win32-x64-msvc\next-swc.win32-x64-msvc.node is not a valid Win32 application.
+D:\hackathon\cashcue\node_modules\@next\swc-win32-x64-msvc\next-swc.win32-x64-msvc.node
+DLOPEN_EXIT=0
+NOTE: an earlier one-liner attempt returned 'DLOPEN_ERR ERR_DLOPEN_FAILED The specified module could not be found.' but PowerShell backtick/$ quoting mangled the path, so that result is not valid.
+
+== 3. package-lock.json entry ==
+{
+  version: '15.1.6',
+  cpu: [ 'x64' ],
+  license: 'MIT',
+  optional: true,
+  os: [ 'win32' ],
+  engines: { node: '>= 10' }
+}
+LOCK_EXIT=0
+
+== 4. sha512 of .node file (base64) ==
+sha512-KZ4Dp7UYxjdJzKpWwQOQs8rubx8VvL/G9beSjiuzMcKCq8sKtAhDHl/xxovE8acbqmSHl3vG6jAy+s+bdSU9JA==
+SHA512_EXIT=0
+NOTE: the lockfile integrity covers the npm tarball, not the extracted .node file, so a mismatch here is expected and does not by itself prove corruption.

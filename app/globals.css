@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --cc-bg: #f6f7fb;
+  --cc-card: #ffffff;
+  --cc-border: #e4e7f0;
+  --cc-ink: #141824;
+  --cc-muted: #525a70;
+  --cc-primary: #4338ca;
+  --cc-primary-hover: #3730a3;
+  --cc-amber: #d97706;
+  --cc-amber-fg: #b45309;
+  --cc-amber-bg: #fef3c7;
+  --cc-danger: #e11d48;
+  --cc-danger-fg: #be123c;
+  --cc-danger-bg: #ffe4e6;
+  --cc-ok-fg: #15803d;
+  --cc-ok-bg: #dcfce7;
+}
+
+body {
+  @apply min-h-screen bg-cc-bg text-cc-ink antialiased;
+}
+
+.bg-app-glow {
+  background:
+    radial-gradient(1000px 520px at 8% -12%, rgba(67, 56, 202, 0.08), transparent 55%),
+    radial-gradient(800px 420px at 92% 0%, rgba(217, 119, 6, 0.05), transparent 50%),
+    linear-gradient(180deg, #f6f7fb 0%, #eef0f7 100%);
+}

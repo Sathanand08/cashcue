@@ -1,0 +1,68 @@
+
+> cashcue@0.1.0 build
+> node scripts/next.mjs build
+
+   ▲ Next.js 15.1.6
+
+   Creating an optimized production build ...
+ ⚠ Found lockfile missing swc dependencies, patching...
+ ⚠ Attempted to load @next/swc-win32-x64-msvc, but an error occurred: \\?\D:\hackathon\cashcue\node_modules\@next\swc-win32-x64-msvc\next-swc.win32-x64-msvc.node is not a valid Win32 application.
+\\?\D:\hackathon\cashcue\node_modules\@next\swc-win32-x64-msvc\next-swc.win32-x64-msvc.node
+ ⚠ Attempted to load @next/swc-win32-x64-msvc, but an error occurred: \\?\D:\hackathon\cashcue\node_modules\@next\swc-win32-x64-msvc\next-swc.win32-x64-msvc.node is not a valid Win32 application.
+\\?\D:\hackathon\cashcue\node_modules\@next\swc-win32-x64-msvc\next-swc.win32-x64-msvc.node
+ ⚠ Found lockfile missing swc dependencies, patching...
+ ⚠ Attempted to load @next/swc-win32-x64-msvc, but an error occurred: \\?\D:\hackathon\cashcue\node_modules\@next\swc-win32-x64-msvc\next-swc.win32-x64-msvc.node is not a valid Win32 application.
+\\?\D:\hackathon\cashcue\node_modules\@next\swc-win32-x64-msvc\next-swc.win32-x64-msvc.node
+ ⚠ Found lockfile missing swc dependencies, patching...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+   Collecting page data ...
+ ⚠ Attempted to load @next/swc-win32-x64-msvc, but an error occurred: \\?\D:\hackathon\cashcue\node_modules\@next\swc-win32-x64-msvc\next-swc.win32-x64-msvc.node is not a valid Win32 application.
+\\?\D:\hackathon\cashcue\node_modules\@next\swc-win32-x64-msvc\next-swc.win32-x64-msvc.node
+ ⚠ Found lockfile missing swc dependencies, patching...
+(node:84016) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:42384) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:50992) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:84648) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:22580) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:27384) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:69200) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:3232) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+ ⚠ Lockfile was successfully patched, please run "npm install" to ensure @next/swc dependencies are downloaded
+   Generating static pages (0/4) ...
+   Generating static pages (1/4) 
+   Generating static pages (2/4) 
+   Generating static pages (3/4) 
+ ✓ Generating static pages (4/4)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                              Size     First Load JS
+┌ ○ /                                    157 B           106 kB
+├ ○ /_not-found                          979 B           106 kB
+├ ƒ /api/bootstrap                       157 B           106 kB
+├ ƒ /api/customers                       157 B           106 kB
+├ ƒ /api/invoices                        157 B           106 kB
+├ ƒ /api/invoices/[id]                   157 B           106 kB
+├ ƒ /api/invoices/[id]/payments          157 B           106 kB
+├ ƒ /api/invoices/[id]/send              157 B           106 kB
+├ ƒ /api/receivables                     157 B           106 kB
+└ ƒ /api/settings/cash                   157 B           106 kB
++ First Load JS shared by all            105 kB
+  ├ chunks/4bd1b696-20882bf820444624.js  52.9 kB
+  ├ chunks/517-12b10450b7ce0f0b.js       50.5 kB
+  └ other shared chunks (total)          1.95 kB
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+BUILD_EXIT=0  
